@@ -6,5 +6,5 @@ spring :
 
 
   jpa :
-    hidernate :
+    hibernate :
       ddl-auto : update
