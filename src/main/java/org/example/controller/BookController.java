@@ -26,4 +26,14 @@ public class BookController {
         return service.getBooKS();
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteBook(@PathVariable Long id) {
+
+        if (service.deleteBook(id)) {
+            return "Delete";
+        } else {
+            return "Not Delete";
+
+        }
+    }
 }
