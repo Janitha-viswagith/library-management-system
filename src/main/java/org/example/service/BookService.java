@@ -8,8 +8,8 @@ import java.util.List;
 public interface BookService {
     void addBook(Book book);
     List<BookEntity> getBooKS();
-
     boolean deleteBook(Long id);
+    Book getBooKById(Long id);
 
 
 }
