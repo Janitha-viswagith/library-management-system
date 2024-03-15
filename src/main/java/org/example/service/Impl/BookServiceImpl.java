@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,40 +18,45 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
+    final BookRepository repository;
 
-    final  BookRepository repository;
 
-    private ModelMapper mapper;
-   @Bean
-   public void setup(){
-       this.mapper = new ModelMapper();
-   }
-
+    ModelMapper mapper;
+    @Bean
+    public void setup(){
+        this.mapper=new ModelMapper();
+    }
     @Override
     public void addBook(Book book) {
-    BookEntity entity  =mapper.map(book, BookEntity.class);
-    repository.save(entity);
+        BookEntity entity = mapper.map(book, BookEntity.class);
+        repository.save(entity);
     }
-
     @Override
-    public List<BookEntity> getBooKS() {
-        return  repository.findAll();
+    public List<BookEntity> getBooks() {
+        return repository.findAll();
     }
-
     @Override
     public boolean deleteBook(Long id) {
-        if(repository.existsById(id)){
+        if (repository.existsById(id)){
             repository.deleteById(id);
             return true;
         }else {
             return false;
         }
     }
+    @Override
+    public Book getBookById(Long id) {
+        Optional<BookEntity> byId = repository.findById(id);
+        return mapper.map(byId, Book.class);
+    }
 
     @Override
-    public Book getBooKById(Long id) {
+    public void addList(List<Book> bookList) {
+        List<BookEntity> entities =new ArrayList<>();
+        bookList.forEach(book ->{
+            entities.add(mapper.map(book,BookEntity.class));
 
-        Optional<BookEntity> byId =repository.findById(id);
-        return mapper.map(byId, Book.class);
+        });
+        repository.saveAll(entities);
     }
 }
